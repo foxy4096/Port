@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+
+{% block title %}
+    Home
+{% endblock title %}
+    
+
+{% block content %}
+    <div class="container">
+        <h3>Stories</h3>
+        <hr>
+        
+        {% for story in stories %}
+            
+            {% if not story.reply_to %}
+            {% include 'story/islands/story.html' %}
+            {% endif %}
+        {% endfor %}
+            
+    </div>
+{% endblock content %}
+    

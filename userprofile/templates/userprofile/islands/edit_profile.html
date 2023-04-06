@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+
+{% block title %}
+Edit Profile
+{% endblock title %}
+
+
+{% block content %}
+<div class="container">
+    <form action="." method="post" class="box">
+        <strong class="block titlebar">Edit Profile</strong>
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit" class="big">Save</button>
+    </form>
+</div>
+{% endblock content %}

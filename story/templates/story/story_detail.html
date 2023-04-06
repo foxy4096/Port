@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+
+
+{% block title %}
+{{story.title}}
+{% endblock title %}
+
+
+{% block content %}
+<div class="container">
+    <h3>Stories</h3>
+    <hr>
+
+    {% include 'story/islands/story.html' %}
+    <hr>
+    <form action="{% url 'reply_story' story.pk %}" method="post">
+        {{ rform }}
+        {% csrf_token %}
+        <br>
+        <br>
+        <button type="submit">Comment</button>
+    </form>
+
+    <br>
+
+    {% for reply in story.replies.all %}
+    {% include 'story/islands/story.html' with story=reply %}
+
+    {% endfor %}
+
+
+</div>
+{% endblock content %}

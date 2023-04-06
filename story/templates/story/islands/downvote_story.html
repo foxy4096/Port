@@ -1,0 +1,5 @@
+<button hx-get="{% url 'upvote_story' story.id %}" hx-target="#votes-{{ story.id }}">
+    <i class="bi bi-arrow-up-short"></i>
+</button>
+{{ story.votes.count }}
+<i class="bi bi-arrow-down-short"></i>

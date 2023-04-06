@@ -1,0 +1,23 @@
+<header class="navbar">
+    <nav aria-label="Site sections">
+        <ul role="list">
+            <li><a href="/">Port</a>
+            <li><a href="/docs">Docs</a>
+            <li><a href="/docs">Contribute</a>
+            <li><a href="{% url 'submit' %}">Submit</a>
+        </ul>
+    </nav>
+    <nav aria-label="Social media links">
+        <ul role="list">
+            <li><a href="/"><img alt=""></a>
+            <li><a href="https://github.com/...">GitHub</a>
+                {% if user.is_authenticated %}
+            <li><a href="{% url 'user-profile' user.username %}" class="ok">{{ user.username }} ({{ user.userprofile.karma }})</a>
+            <li><a href="{% url 'logout' %}" class="bad">Logout</a>
+                {% else %}
+                <li><a href="{% url 'login' %}" class="ok">Login</a>
+                <li><a href="{% url 'signup' %}">Signup</a>
+                {% endif %}
+        </ul>
+    </nav>
+</header>

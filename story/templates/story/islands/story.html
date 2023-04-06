@@ -1,0 +1,28 @@
+{% load humanize %}
+{% load parse_domain %}
+<div class="box plain">
+    <div id="votes-{{ story.id }}">
+        {% include 'story/islands/votes.html' %}
+    </div>
+    <a href="
+    {% if story.url != None %}
+    {{story.url}}
+    {% else %}
+    {% url 'story_detail' story.pk %}
+    {% endif %}
+    " target="_blank">{{ story.title }}</a>
+    <small>
+        {% if story.url|parse_domain %}
+        (<a href="{{ story.url }}" target="_blank">{{ story.url | parse_domain }}</a>)
+        {% endif %}
+        <br>
+        By <a href="{% url 'user-profile' story.created_by.username %}">
+            {{ story.created_by.username }}</a> at <a href="{% url 'story_detail' story.pk %}">
+            {{ story.created_on | naturaltime }}</a> | hide | {{story.replies.count}}
+        Comments
+        {% if story.created_by == user %}
+        | <a href="{% url 'story_delete' story.pk %}">delete</a>
+        {% endif %}
+
+    </small>
+</div>

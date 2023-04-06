@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+
+
+
+{% block title %}
+Delete Story
+{% endblock title %}
+
+
+{% block content %}
+<div class="container box bad">
+
+    <h3>Are you sure you want to delete the story?</h3>
+    {% include 'story/islands/story.html' %}
+    <form action="." method="post">
+        {% csrf_token %}
+        <button type="submit">Yes I am sure</button>
+    </form>
+</div>
+{% endblock content %}

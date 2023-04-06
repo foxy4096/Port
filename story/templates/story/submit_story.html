@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+
+{% block title %}
+Submit Story
+{% endblock title %}
+
+
+{% block content %}
+<div class="container">
+
+    <h3>Submit</h3>
+
+    <form action="." method="post" class="box">
+        {% csrf_token %}
+        {{ form }}
+        <br>
+        <br>
+        <button type="submit">submit</button>
+        <p>
+            Leave url blank to submit a question for discussion. If there is no url, text will appear at the top of the
+            thread. If there is a url, text is optional.
+            
+            You can also submit via bookmarklet.
+        </p>
+    </form>
+</div>
+{% endblock content %}

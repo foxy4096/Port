@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load humanize %}
+
+
+{% block title %}
+Profile: {{tuser.username}}
+{% endblock title %}
+
+
+{% block content %}
+<div class="container">
+    <div class="box">
+        <b>User:</b> {{ tuser.username }}
+        <br>
+        <b>Date Joined:</b> {{ tuser.date_joined | naturaltime }}
+        <br>
+        <b>Karma:</b> {{ tuser.userprofile.karma }}
+        
+        {% if user == tuser %}
+            {{pform.as_p}}
+            {{uform.as_p}}
+        {% endif %}
+            
+    </div>
+
+<h3>Stories</h3>
+<hr>
+    {% for story in tuser.stories.all %}
+    {% include 'story/islands/story.html' %}
+
+    {% endfor %}
+
+</div>
+{% endblock content %}

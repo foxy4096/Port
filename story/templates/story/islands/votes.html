@@ -1,0 +1,9 @@
+<button {% if not user in story.votes.all %}hx-get="{% url 'vote_story' story.id %}" hx-target="#votes-{{ story.id }}"
+    {% else %} disabled {% endif %}>
+    <i class="bi bi-arrow-up-short"></i>
+</button>
+{{ story.votes.count }}
+<button {% if user in story.votes.all %}hx-get="{% url 'vote_story' story.id %}" hx-target="#votes-{{ story.id }}"
+{% else %} disabled {% endif %}>
+    <i class="bi bi-arrow-down-short"></i>
+</button>
