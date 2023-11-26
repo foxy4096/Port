@@ -1,28 +1,52 @@
 {% load humanize %}
+{% load story_tag %}
+
 {% load parse_domain %}
-<div class="box plain">
-    <div id="votes-{{ story.id }}">
-        {% include 'story/islands/votes.html' %}
-    </div>
-    <a href="
-    {% if story.url != None %}
-    {{story.url}}
-    {% else %}
-    {% url 'story_detail' story.pk %}
-    {% endif %}
-    " target="_blank">{{ story.title }}</a>
-    <small>
+<div class="{% if is_reply %} custom-box {% else %} box {% endif %} plain">
+        <sapn id="votes-{{ story.id }}">
+            {% include 'story/islands/votes.html' %} &#160;|&#160;
+
+        </sapn>
+        
+        {% if is_reply %}
+        {{story.title}}
+            {% else %}
+            <a href="
+            {% if story.url != None %}
+            {{story.url}}
+            {% else %}
+            {% url 'story_detail' story.pk %}
+            {% endif %}
+            " target="_blank">{{ story.title }}</a>
+            {% endif %}
+        <small>
         {% if story.url|parse_domain %}
         (<a href="{{ story.url }}" target="_blank">{{ story.url | parse_domain }}</a>)
         {% endif %}
         <br>
+        
         By <a href="{% url 'user-profile' story.created_by.username %}">
             {{ story.created_by.username }}</a> at <a href="{% url 'story_detail' story.pk %}">
-            {{ story.created_on | naturaltime }}</a> | hide | {{story.replies.count}}
-        Comments
-        {% if story.created_by == user %}
-        | <a href="{% url 'story_delete' story.pk %}">delete</a>
-        {% endif %}
+            {{ story.created_on | naturaltime }}</a> | hide
+            {% if story.created_by == user %}
+            | <a href="{% url 'story_delete' story.pk %}">delete</a>
+            {% endif %}
+            {% if is_reply %}
+            | <a href="{% url 'story_detail' story.pk %}">reply</a>
+            {% else %}
+            | <a href="{% url 'story_detail' story.pk %}">{{story.total_comments_count}}
+                Comments</a>
+            {% endif %}
+            
+            {% if story.reply_to and not is_reply %}
+            |
+            <a href="{% url 'story_detail' story.reply_to.pk %}">Parent</a>
+            {% endif %}
 
     </small>
+    {% if is_reply and recursion < 15 %}
+    {% for reply in story.replies.all %}
+    {% include 'story/islands/story.html' with story=reply is_reply=True recursion=recursion|add:1 %}
+    {% endfor %}
+    {% endif %}
 </div>

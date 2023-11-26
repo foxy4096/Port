@@ -1,6 +1,8 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% load humanize %}
+{% load fetch_avatar %}
+
 
 
 {% block title %}
@@ -11,24 +13,32 @@ Profile: {{tuser.username}}
 {% block content %}
 <div class="container">
     <div class="box">
+        <img src="{{ tuser.email | fetch_avatar }}" alt="{{ tuser }}">
+        <br>
+        <br>
         <b>User:</b> {{ tuser.username }}
         <br>
         <b>Date Joined:</b> {{ tuser.date_joined | naturaltime }}
         <br>
         <b>Karma:</b> {{ tuser.userprofile.karma }}
-        
+
         {% if user == tuser %}
+        <form action="{% url 'edit_profile' tuser.username %}" method="post">
             {{pform.as_p}}
             {{uform.as_p}}
+            {% csrf_token %}
+            <button type="submit" class="big">Save</button>
+        </form>
         {% endif %}
-            
+
     </div>
 
-<h3>Stories</h3>
-<hr>
+    <h3>Stories</h3>
+    <hr>
     {% for story in tuser.stories.all %}
+    {% if not story.reply_to %}
     {% include 'story/islands/story.html' %}
-
+    {% endif %}
     {% endfor %}
 
 </div>

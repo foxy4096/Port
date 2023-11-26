@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+
+{% block title %}
+    Search: "{{query}}"
+{% endblock title %}
+    
+
+{% block content %}
+    <div class="container">
+        <h1>Search Results for: "{{query}}"</h1>
+        <hr>
+        {% for story in stories %}
+            
+            {% if not story.reply_to %}
+            {% include 'story/islands/story.html' %}
+            {% endif %}
+        {% endfor %}
+            
+    </div>
+{% endblock content %}
+    

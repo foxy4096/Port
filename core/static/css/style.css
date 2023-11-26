@@ -41,3 +41,23 @@ body {
 .container {
   padding: 10px;
 } */
+
+/* .container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+} */
+
+.custom-box {
+  margin: var(--gap) 0;
+  padding: 9px 10px 1px 35px;
+  overflow: clip;
+  border-left: 2px solid;
+}
+
+#id_about {
+  width: 581px;
+  height: 170;
+}

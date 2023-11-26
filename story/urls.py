@@ -9,4 +9,8 @@ urlpatterns = [
     path("story/<int:pk>/delete/", views.delete_story, name="story_delete"),
     path("story/<int:pk>/reply/", views.reply_story, name="reply_story"),
     path("story/<int:pk>/vote/", views.vote_story, name="vote_story"),
+
+    # Search
+    path("search/", views.search_story, name="search_story"),
+
 ]

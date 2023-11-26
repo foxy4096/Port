@@ -25,8 +25,8 @@ def signup(request):
 def get_user(request, username):
     user = get_object_or_404(User, username=username)
     if request.user == user:
-        uform = UserEditForm()
-        pform = UserprofileEditForm()
+        uform = UserEditForm(instance=request.user)
+        pform = UserprofileEditForm(instance=request.user.userprofile)
         return render(
             request,
             "userprofile/user.html",
@@ -36,13 +36,13 @@ def get_user(request, username):
 
 
 @login_required
-def edit_profile(request):
-    if request.method == "POST":
-        uform = UserEditForm(request.POST)
-        pform = UserprofileEditForm(request.POST)
+def edit_profile(request, username):
+    if request.method == "POST" and request.user.username == username:
+        uform = UserEditForm(request.POST, instance=request.user)
+        pform = UserprofileEditForm(request.POST, instance=request.user.userprofile)
         if uform.is_valid() and pform.is_valid():
             user = uform.save()
             pform.save()
-            messages.success(request, f"Profile updated for {user.username}!")
+            messages.success(request, f"Profile updated for {user.username}!", extra_tags="ok")
         return redirect("user-profile", request.user)
     return redirect("user-profile", request.user)

@@ -1,9 +1,15 @@
-<button {% if not user in story.votes.all %}hx-get="{% url 'vote_story' story.id %}" hx-target="#votes-{{ story.id }}"
-    {% else %} disabled {% endif %}>
+{% if user.is_authenticated %}
+<a class="<button>" hx-get="{% url 'vote_story' story.id %}" hx-target="#votes-{{ story.id }}">
+    {% if not user in story.votes.all %}
     <i class="bi bi-arrow-up-short"></i>
-</button>
-{{ story.votes.count }}
-<button {% if user in story.votes.all %}hx-get="{% url 'vote_story' story.id %}" hx-target="#votes-{{ story.id }}"
-{% else %} disabled {% endif %}>
+    {% else %}
     <i class="bi bi-arrow-down-short"></i>
-</button>
+    {% endif %}
+</a>
+{% else %}
+<a class="<button>" href="{% url 'login' %}?next={% url 'vote_story' story.id %}" hx-target="#votes-{{ story.id }}">
+    <i class="bi bi-arrow-up-short"></i>
+</a>
+{% endif %}
+&#160;
+{{ story.votes.count }} Points

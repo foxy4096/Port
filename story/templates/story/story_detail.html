@@ -13,6 +13,10 @@
 
     {% include 'story/islands/story.html' %}
     <hr>
+    
+    {% if user.is_authenticated %}
+        
+    
     <form action="{% url 'reply_story' story.pk %}" method="post">
         {{ rform }}
         {% csrf_token %}
@@ -20,13 +24,18 @@
         <br>
         <button type="submit">Comment</button>
     </form>
+    {% else %}
+    <p>You need to <a href="{% url 'login' %}">login</a> to comment.</p>
+    {% endif %}
 
     <br>
-
-    {% for reply in story.replies.all %}
-    {% include 'story/islands/story.html' with story=reply %}
-
-    {% endfor %}
+    {% if story.replies.all %}
+    <div class="box">
+        {% for reply in story.replies.all %}
+        {% include 'story/islands/story.html' with story=reply is_reply=True recursion=1 %}
+        {% endfor %}
+    </div>
+    {% endif %}
 
 
 </div>

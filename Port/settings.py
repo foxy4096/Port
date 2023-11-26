@@ -26,9 +26,9 @@ SECRET_KEY = "django-insecure-g&)tmqhcx(^%dau(-%fcvqak%^6(z!=ae^qbuut_q9#ue9^5b0
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'core:home'
 LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'core:home'
 
 
 # Application definition
@@ -41,9 +41,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    "maintenance_mode",
+
     "core.apps.CoreConfig",
     "story.apps.StoryConfig",
     "userprofile.apps.UserprofileConfig",
+    "notifications.apps.NotificationsConfig",
     
 ]
 
@@ -55,6 +59,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "maintenance_mode.middleware.MaintenanceModeMiddleware",
 ]
 
 ROOT_URLCONF = "Port.urls"
@@ -70,6 +75,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "notifications.context_processors.notifications",
             ],
         },
     },

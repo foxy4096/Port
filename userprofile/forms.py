@@ -14,6 +14,7 @@ class UserprofileEditForm(forms.ModelForm):
         fields = ("about",)
 
 
+
 class UserEditForm(forms.ModelForm):
     """Form definition for UserEdit."""
 

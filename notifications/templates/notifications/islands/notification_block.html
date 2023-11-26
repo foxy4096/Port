@@ -1,0 +1,21 @@
+{% load humanize %}
+{% load story_tag %}
+{% load parse_domain %}
+<div class="box">
+    <h4>
+        <a href="{% url 'notification_redirect' notification.id %}">{{ notification }}</a>
+    </h4>
+    <span class="chip ok" title="{{notification.created_at}}">{{ notification.created_at|naturaltime }}</span>
+    
+    {% if notification.is_read %}
+    <span class="chip info" title="Already Read">Already Read</span>
+    {% else %}
+    <span class="chip bad" title="Unread">Unread</span>
+    {% endif %}
+        
+    
+    {% if notification.object_type == 'story' %}
+    {% story_block notification.object_id %}
+    {% endif %}
+        
+</div>

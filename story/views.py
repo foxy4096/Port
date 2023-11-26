@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Q
 
 from .forms import StoryForm, StoryLinkForm, ReplyStoryForm
+from notifications.models import Notification
 from .models import Story
 
 
@@ -15,7 +17,7 @@ def submit_story(request):
             story.created_by = request.user
             story.save()
             messages.success(request, "Story added successfully!")
-            return redirect("home")
+            return redirect("core:home")
     form = StoryForm()
     return render(request, "story/submit_story.html", {"form": form})
 
@@ -29,7 +31,7 @@ def submit_story_link(request):
             story.created_by = request.user
             story.save()
             messages.success(request, "Story added successfully!", extra_tags="ok")
-            return redirect("home")
+            return redirect("core:home")
     form = StoryLinkForm(request.GET)
     return render(request, "story/submit_story.html", {"form": form})
 
@@ -48,7 +50,7 @@ def delete_story(request, pk):
     if request.method == "POST":
         story.delete()
         messages.warning(request, "Story deleted successfully!", extra_tags="ok")
-        return redirect("home")
+        return redirect("core:home")
     return render(request, "story/delete_story.html", {"story": story})
 
 
@@ -62,6 +64,13 @@ def reply_story(request, pk):
             reply.reply_to = story
             reply.created_by = request.user
             reply.save()
+            Notification.notify(
+                recipient=story.created_by,
+                actor=reply.created_by,
+                verb="replied",
+                object_type="story",
+                object_id=reply.pk,
+            )
             messages.success(request, "Reply added successfully!", extra_tags="ok")
             return redirect("story_detail", story.pk)
 
@@ -74,4 +83,13 @@ def vote_story(request, pk):
     story.vote(request.user)
     return render(request, "story/islands/votes.html", {"story": story})
 
-    
+
+def search_story(request):
+    if query := request.GET.get("q", None):
+        stories = Story.objects.filter(Q(title__icontains=query)|
+                                       Q(url__icontains=query)|
+                                       Q(content__icontains=query)|
+                                       Q(created_by__username__icontains=query)
+                                       )
+        return render(request, "story/search_story.html", {"query": query, "stories": stories})
+    return redirect("core:home")
